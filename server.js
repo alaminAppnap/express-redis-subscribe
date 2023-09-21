@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+const { sendNotification,notificationPayload } = require('./notificationService');
 const port = 3000
 
 const Redis = require("ioredis");
@@ -15,13 +16,26 @@ const subscriber = new Redis({
   password: '123456', // Replace with your custom Redis password
 });
 
-const channelName = 'laravelsmssend'; 
-subscriber.subscribe(channelName);
+const smsSend = 'laravelsmssend'; 
+const slackNotification = 'laravelslacknotification'; 
+subscriber.subscribe(smsSend);
+subscriber.subscribe(slackNotification);
 
 let latestMessage = 'No messages received yet';
 subscriber.on('message', (channel, message) => {
-  latestMessage = `Received message on channel '${channel}': ${message}`
-  console.log(latestMessage);
+  if(channel == "laravelsmssend"){
+
+  }
+  if(channel == "laravelslacknotification"){
+    slackWebbhookUrl = "https://hooks.slack.com/services/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"
+    payload = notificationPayload();
+    sendNotification(webhookUrl, payload);
+  }
+  else{
+    latestMessage = `Received message on channel '${channel}': ${message}`
+    console.log(latestMessage);
+  }
+  
 });
 
 
