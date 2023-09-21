@@ -1,37 +1,40 @@
 const express = require('express')
+const axios = require('axios');
 const app = express()
-const { sendNotification,notificationPayload } = require('./notificationService');
-const port = 3000
+require('dotenv').config();
+
+const { sendNotification,readyPayload } = require('./slackNotificationService');
+const port = process.env.PORT || 3000;
+
 
 const Redis = require("ioredis");
 const redis = new Redis({
-  host: 'localhost', // Replace with your Redis server host
-  port: 6379,        // Replace with your Redis server port
-  password: '123456', // Replace with your custom Redis password
+  host: process.env.REDIS_HOST,
+  port: process.env.REDIS_PORT,
+  password: process.env.REDIS_PASSWORD,
 });
 
 const subscriber = new Redis({
-  host: 'localhost', // Replace with your Redis server host
-  port: 6379,        // Replace with your Redis server port
-  password: '123456', // Replace with your custom Redis password
+  host: process.env.REDIS_HOST,
+  port: process.env.REDIS_PORT,
+  password: process.env.REDIS_PASSWORD,
 });
 
-let latestMessage = 'No messages received yet';
+/**============Channel name =========== */
 const smsSend = 'laravelsmssend'; 
 const slackNotification = 'laravelslacknotification'; 
 subscriber.subscribe(smsSend);
 subscriber.subscribe(slackNotification);
 
-
-/**===================================================================== */
+/**===============Subscribe Channel=============================================== */
 subscriber.on('message', (channel, message) => {
-  if(channel == "laravelsmssend"){
+  if(channel == smsSend){
 
   }
-  if(channel == "laravelslacknotification"){
-    slackWebbhookUrl = "https://hooks.slack.com/services/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"
-    payload = notificationPayload();
-    sendNotification(slackWebbhookUrl, payload);
+
+  if(channel == slackNotification){
+    var slackWebbhookUrl = process.env.WEB_HOOK_URL;
+    sendNotification(slackWebbhookUrl, message);
   }
   else{
     latestMessage = `Received message on channel '${channel}': ${message}`
@@ -43,7 +46,7 @@ subscriber.on('message', (channel, message) => {
 
 
 app.get('/', (req, res) => {
-  res.send(`Latest message from Redis: ${latestMessage}`);
+   res.send(`Landing page`);
 })
 
 app.listen(port, () => {
