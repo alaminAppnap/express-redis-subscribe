@@ -29,7 +29,7 @@ subscriber.on('message', (channel, message) => {
 
   }
   if(channel == "laravelslacknotification"){
-    slackWebbhookUrl = "https://hooks.slack.com/services/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"
+    slackWebbhookUrl = "https://hooks.slack.com/services/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"
     payload = notificationPayload();
     sendNotification(slackWebbhookUrl, payload);
   }
