@@ -14,10 +14,8 @@ const sendNotification = async (webhookUrl, message) => {
 
 
 const readyPayload = (data) => {
-  var phone = data?.phone || "01700000000";
-  var message = data?.message || "Test message";
-  var channel = data?.channel || "Notification Test";
-  var username = data?.username || "Notification Username";
+  var phone = data && data.phone ? data.phone : "01700000000";
+  var message = data && data.message ? data.message : "Test message";
 
     return {
 
