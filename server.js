@@ -18,13 +18,15 @@ const subscriber = new Redis({
 const channelName = 'laravelsmssend'; 
 subscriber.subscribe(channelName);
 
+let latestMessage = 'No messages received yet';
 subscriber.on('message', (channel, message) => {
-  console.log(`Received message on channel '${channel}': ${message}`);
+  latestMessage = `Received message on channel '${channel}': ${message}`
+  console.log(latestMessage);
 });
 
 
 app.get('/', (req, res) => {
-  res.send("hello world")
+  res.send(`Latest message from Redis: ${latestMessage}`);
 })
 
 app.listen(port, () => {
