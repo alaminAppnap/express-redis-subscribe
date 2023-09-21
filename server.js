@@ -21,8 +21,9 @@ const subscriber = new Redis({
 });
 
 /**============Channel name =========== */
-const smsSend = 'laravelsmssend'; 
-const slackNotification = 'laravelslacknotification'; 
+const smsSend = process.env.REDIS_SMS_CHANNEL || 'laravelsmssend'
+const slackNotification = process.env.REDIS_SLACK_NOTIFICATION_CHANNEL || 'laravelslacknotification'; 
+
 subscriber.subscribe(smsSend);
 subscriber.subscribe(slackNotification);
 
