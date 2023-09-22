@@ -37,11 +37,6 @@ subscriber.on('message', (channel, message) => {
     var slackWebbhookUrl = process.env.WEB_HOOK_URL;
     sendNotification(slackWebbhookUrl, JSON.parse(message));
   }
-  else{
-    latestMessage = `Received message on channel '${channel}': ${message}`
-    console.log(latestMessage);
-  }
-  
 });
 /**===================================================================== */
 
