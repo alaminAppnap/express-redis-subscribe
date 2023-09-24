@@ -1,8 +1,7 @@
 const express = require('express')
-const axios = require('axios');
 const app = express()
 require('dotenv').config();
-const {db} = require('./Database/mongodb');
+const {db} = require('./Database/mongodb')
 
 const { sendNotification } = require('./Notifications/slackNotificationService');
 const { sendSslMessage } = require('./SMS/sslWirelessSMSProvider');
