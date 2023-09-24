@@ -21,21 +21,21 @@ const subscriber = new Redis({
 });
 
 /**============Channel name =========== */
-const smsSend = process.env.REDIS_SMS_CHANNEL || 'laravelsmschannel'
-const slackNotification = process.env.REDIS_SLACK_NOTIFICATION_CHANNEL || 'laravelslackchannel'; 
+const smsSendChannel = process.env.REDIS_SMS_CHANNEL || 'laravelsmschannel'
+const slackNotificationChannel = process.env.REDIS_SLACK_NOTIFICATION_CHANNEL || 'laravelslackchannel'; 
 
-subscriber.subscribe(smsSend);
-subscriber.subscribe(slackNotification);
+subscriber.subscribe(smsSendChannel);
+subscriber.subscribe(slackNotificationChannel);
 
 /**===============Subscribe Channel=============================================== */
 subscriber.on('message', (channel, message) => {
-  if(channel === smsSend){
+  if(channel === smsSendChannel){
 
   }
 
-  if(channel === slackNotification){
-    const slackWebbhookUrl = process.env.WEB_HOOK_URL;
-    sendNotification(slackWebbhookUrl, JSON.parse(message));
+  if(channel === slackNotificationChannel){
+    const slackWebhookUrl = process.env.WEB_HOOK_URL;
+    sendNotification(slackWebhookUrl, JSON.parse(message));
   }
 });
 /**===================================================================== */
