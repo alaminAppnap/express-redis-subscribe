@@ -34,7 +34,10 @@ subscriber.on('message', (channel, message) => {
     let data = JSON.parse(message);
     let phone = data && data.phone  ? data.phone : "01700000000";
     let sms = data && data.message ? data.message : "Test message";
-    sendSslMessage(phone,sms);
+
+    if(process.env.SMS_SEND === true){
+      sendSslMessage(phone,sms);
+    }
   }
 
   if(channel === slackNotificationChannel){
