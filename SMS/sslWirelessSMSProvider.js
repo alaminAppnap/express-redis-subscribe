@@ -1,9 +1,11 @@
 let request = require('request-promise');
 
-const SMS_API = 'http://sms.sslwireless.com/pushapi/dynamic/server.php';
+const SMS_API = process.env.SSL_WIRELESS_MESSAGE_API_URL || 'http://sms.sslwireless.com/pushapi/dynamic/server.php';
+const SMS_API_TOKEN = process.env.SSL_WIRELESS_MESSAGE_API_TOKEN;
+const SMS_CSMS_ID = process.env.SSL_WIRELESS_MESSAGE_CSMS_ID;
 
-async function send(receiver, text, userName, password, bengaliSID, englishSID, csmsid) {
-    let params = getParams(receiver, text, userName, password, bengaliSID, englishSID, csmsid);
+async function smsSend(receiverNumber,message) {
+    let params = getParams(SMS_CSMS_ID, message, receiverNumber, SMS_API_TOKEN, SMS_CSMS_ID, SMS_CSMS_ID);
 
     return request({
         url: `${ SMS_API }`,
@@ -12,6 +14,28 @@ async function send(receiver, text, userName, password, bengaliSID, englishSID, 
         json: true
     });
 
+}
+
+function getParams(cSMSId,message,receiverNumber, apiToken, bengaliSId, englishSId) {
+    let params = {
+        csms_id: cSMSId,
+        sms: message,
+        msisdn: receiverNumber,
+        api_token: apiToken,
+        sid: englishSId,
+
+    };
+
+    if (!isEnglishSMS(message)) {
+        params.sid = bengaliSId;
+        params.sms = bengaliToUnicode(message);
+    }
+
+    return params;
+}
+
+function isEnglishSMS(message) {
+    return Array.from(message).every(char => char.charCodeAt(0) <= 127);
 }
 
 function bengaliToUnicode(bengaliText) {
@@ -25,29 +49,6 @@ function bengaliToUnicode(bengaliText) {
     return unicode;
 }
 
-function getParams(receiver, text, userName, password, bengaliSId, englishSId, cSMSId) {
-    let params = {
-        msisdn: receiver,
-        user: userName,
-        pass: password,
-        sms: text,
-        sid: englishSId,
-        csmsid: cSMSId
-    };
-
-    if (!isEnglishSMS(text)) {
-        params.sid = bengaliSId;
-        params.sms = bengaliToUnicode(text);
-    }
-
-    return params;
-}
-
-function isEnglishSMS(text) {
-    return Array.from(text).every(char => char.charCodeAt(0) <= 127);
-}
-
 module.exports = {
-    send,
-    bengaliToUnicode
+    smsSend
 };
