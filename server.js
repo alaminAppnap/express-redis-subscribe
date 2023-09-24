@@ -31,10 +31,10 @@ subscriber.subscribe(slackNotificationChannel);
 /**===============Subscribe Channel=============================================== */
 subscriber.on('message', (channel, message) => {
   if(channel === smsSendChannel){
-    const data = JSON.parse(message);
-    const phone = data && data.phone  ? data.phone : "01700000000";
-    const message = data && data.message ? data.message : "Test message";
-    smsSend(phone,message);
+    let data = JSON.parse(message);
+    let phone = data && data.phone  ? data.phone : "01700000000";
+    let sms = data && data.message ? data.message : "Test message";
+    smsSend(phone,sms);
   }
 
   if(channel === slackNotificationChannel){
