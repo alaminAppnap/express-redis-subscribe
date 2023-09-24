@@ -34,7 +34,7 @@ subscriber.on('message', (channel, message) => {
     const data = JSON.parse(message);
     const phone = data && data.phone  ? data.phone : "01700000000";
     const message = data && data.message ? data.message : "Test message";
-    // smsSend(phone,message);
+    smsSend(phone,message);
   }
 
   if(channel === slackNotificationChannel){
