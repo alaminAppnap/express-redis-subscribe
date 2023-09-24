@@ -1,8 +1,8 @@
 const readyPayload = (data) => {
-    var phone = data && data.phone ? data.phone : "01700000000";
-    var message = data && data.message ? data.message : "Test message";
-  
-      return {
+    const phone = data && data.phone ? data.phone : "01700000000";
+    const message = data && data.message ? data.message : "Test message";
+
+    return {
   
         "attachments":[
            {
@@ -26,4 +26,4 @@ const readyPayload = (data) => {
      }
     };
 
-module.exports = { sendNotification,readyPayload };
+module.exports = {readyPayload };

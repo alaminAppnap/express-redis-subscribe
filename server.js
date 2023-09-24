@@ -3,7 +3,7 @@ const axios = require('axios');
 const app = express()
 require('dotenv').config();
 
-const { sendNotification,readyPayload } = require('./slackNotificationService');
+const { sendNotification } = require('./Notifications/slackNotificationService');
 const port = process.env.PORT || 3000;
 
 
@@ -29,12 +29,12 @@ subscriber.subscribe(slackNotification);
 
 /**===============Subscribe Channel=============================================== */
 subscriber.on('message', (channel, message) => {
-  if(channel == smsSend){
+  if(channel === smsSend){
 
   }
 
-  if(channel == slackNotification){
-    var slackWebbhookUrl = process.env.WEB_HOOK_URL;
+  if(channel === slackNotification){
+    const slackWebbhookUrl = process.env.WEB_HOOK_URL;
     sendNotification(slackWebbhookUrl, JSON.parse(message));
   }
 });
