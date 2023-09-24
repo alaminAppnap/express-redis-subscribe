@@ -4,7 +4,7 @@ const app = express()
 require('dotenv').config();
 
 const { sendNotification } = require('./Notifications/slackNotificationService');
-const { smsSend } = require('./SMS/sslWirelessSMSProvider');
+const { sendSslMessage } = require('./SMS/sslWirelessSMSProvider');
 const port = process.env.PORT || 3000;
 
 
@@ -34,7 +34,7 @@ subscriber.on('message', (channel, message) => {
     let data = JSON.parse(message);
     let phone = data && data.phone  ? data.phone : "01700000000";
     let sms = data && data.message ? data.message : "Test message";
-    smsSend(phone,sms);
+    sendSslMessage(phone,sms);
   }
 
   if(channel === slackNotificationChannel){
