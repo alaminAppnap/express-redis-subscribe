@@ -35,7 +35,7 @@ subscriber.on('message', (channel, message) => {
     let phone = data && data.phone  ? data.phone : "01700000000";
     let sms = data && data.message ? data.message : "Test message";
 
-    if(process.env.SMS_SEND === true){
+    if(process.env.SMS_SEND){
       sendSslMessage(phone,sms);
     }
   }
