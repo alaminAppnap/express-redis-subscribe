@@ -38,7 +38,7 @@ async function smsHistoryCreateOnFile(message,phoneNumber,response,csmsId){
 
         if (fs.existsSync(filePath).size !=0) {
             const fileData = fs.readFileSync(filePath, 'utf-8');
-            existingData = fileData;
+            existingData = JSON.parse(fileData);
         }
 
         existingData.push(newJsonObject);
