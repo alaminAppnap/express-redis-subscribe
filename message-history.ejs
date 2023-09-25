@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Message History</title>
+</head>
+<body>
+  <h1>Message History</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Message</th>
+        <th>Phone</th>
+        <th>Response</th>
+        <th>csmsId</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% items.forEach(item => { %>
+        <tr>
+          <td><%= item.message %></td>
+          <td><%= item.phone %></td>
+          <td><%= item.response %></td>
+          <td><%= item.csmsId %></td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+  <div class="pagination">
+    <% for (let i = 1; i <= totalPages; i++) { %>
+      <a href="/items?page=<%= i %>"><%= i %></a>
+    <% } %>
+  </div>
+</body>
+</html>
