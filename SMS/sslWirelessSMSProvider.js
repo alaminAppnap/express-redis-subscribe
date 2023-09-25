@@ -1,6 +1,6 @@
 const axios = require('axios');
 //const {db} = require('../Database/mongodb');
-//const {smsHistoryCreate} = require('../SMS/message-history');
+const {smsHistoryCreate} = require('../SMS/message-history');
 
 const apiUrl = process.env.SSL_WIRELESS_MESSAGE_API_URL || 'http://sms.sslwireless.com/pushapi/dynamic/server.php';
 const apiToken = process.env.SSL_WIRELESS_MESSAGE_API_TOKEN;
