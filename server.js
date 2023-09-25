@@ -7,6 +7,8 @@ const { sendNotification } = require('./Notifications/slackNotificationService')
 const { sendSslMessage } = require('./SMS/sslWirelessSMSProvider');
 const port = process.env.PORT || 3000;
 
+const smsHistoryRouter = require('./Routes/message-history');
+app.use('/', smsHistoryRouter);
 
 const Redis = require("ioredis");
 const redis = new Redis({
