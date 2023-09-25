@@ -5,9 +5,9 @@ const path = require('path');
 
 async function smsHistoryCreate(message,phoneNumber,response,csmsId){
     try {
-        let respoonseData = response?.data || {};
+        let responseData = response.data || [];
 
-        smsHistoryCreateOnFile(message,phoneNumber,respoonseData,csmsId);
+        smsHistoryCreateOnFile(message,phoneNumber,responseData,csmsId);
 
         /**  this code for mode */
 
