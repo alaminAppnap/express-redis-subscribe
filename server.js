@@ -41,7 +41,7 @@ subscriber.on('message', (channel, message) => {
   }
 
   if(channel === slackNotificationChannel){
-    const slackWebhookUrl = process.env.WEB_HOOK_URL;
+    const slackWebhookUrl = process.env.SLACK_WEB_HOOK_URL;
     sendNotification(slackWebhookUrl, JSON.parse(message));
   }
 });
