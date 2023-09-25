@@ -1,0 +1,36 @@
+version: '3'
+networks:
+  message_service_network:
+    driver: bridge
+
+services:
+  message-service-app:
+    build: .
+    ports:
+      - "3005:3000"
+    volumes:
+      - .:/app
+    container_name: message_service_app
+    depends_on:
+      - message-service-mongo
+      - message-service-redis
+    networks:
+      - message_service_network
+
+  message-service-mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    container_name: message_service_mongo
+    volumes:
+      - ./data:/data/db
+    networks:
+      - message_service_network
+
+  message-service-redis:
+    image: redis
+    ports:
+      - "6379:6379"
+    container_name: message_service_redis
+    networks:
+      - message_service_network
