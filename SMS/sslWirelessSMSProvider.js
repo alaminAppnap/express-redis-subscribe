@@ -17,7 +17,9 @@ async function sendSslMessage(number, message) {
                 sid: csmsId,
             },
         });
-//smsHistoryCreate(message,number,response,csmsId);
+        
+        smsHistoryCreate(message,number,response,csmsId);
+        
         return response;
     } catch (error) {
         throw error;
