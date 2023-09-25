@@ -1,5 +1,4 @@
-// const MessageHistory = require('../Data/Models/MessageHistory');
-// const {db} = require('../Database/mongodb');
+const MessageHistory = require('../Data/Models/MessageHistory');
 const fs = require('fs');
 const path = require('path');
 
@@ -11,14 +10,14 @@ async function smsHistoryCreate(message,phoneNumber,response,csmsId){
 
         /**  this code for mode */
 
-        // const newMessageHistory = new MessageHistory({
-        //     message,
-        //     phoneNumber,
-        //     response,
-        //     csmsId,
-        // });
+        const newMessageHistory = new MessageHistory({
+            message,
+            phoneNumber,
+            response,
+            csmsId,
+        });
 
-        // await newMessageHistory.save();
+        await newMessageHistory.save();
 
         return { success: true, message: 'Message history created successfully' };
     } catch (error) {
