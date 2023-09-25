@@ -5,7 +5,7 @@ const path = require('path');
 
 async function smsHistoryCreate(message,phoneNumber,response,csmsId){
     try {
-        
+
         smsHistoryCreateOnFile(message,phoneNumber,response,csmsId);
 
         /**  this code for mode */
@@ -42,7 +42,7 @@ async function smsHistoryCreateOnFile(message,phoneNumber,response,csmsId){
 
         existingData.push(newJsonObject);
 
-        fs.writeFileSync(filePath, JSON.stringify(existingData, null, 2));
+        fs.writeFileSync(filePath, (existingData));
 
         return { success: true, message: 'Message history created successfully' };
     } catch (error) {
