@@ -21,7 +21,5 @@ jobs:
             git fetch --all
             git pull origin master
             git checkout master
-            npm install
-            export NVM_DIR=~/.nvm
-            source ~/.nvm/nvm.sh
-            pm2 restart all
+            make build
+            make up
