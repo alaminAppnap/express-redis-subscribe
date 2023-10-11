@@ -32,5 +32,6 @@ services:
     ports:
       - "6379:6379"
     container_name: message_service_redis
+    command: redis-server --save 20 1 --loglevel warning --requirepass 12345678
     networks:
       - message_service_network

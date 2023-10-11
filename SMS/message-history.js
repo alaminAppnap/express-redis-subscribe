@@ -8,7 +8,7 @@ async function smsHistoryCreate(message,phoneNumber,response,csmsId){
 
         smsHistoryCreateOnFile(message,phoneNumber,responseData,csmsId);
 
-        /**  this code for mode */
+        /**  this code for model */
 
         const newMessageHistory = new MessageHistory({
             message,
