@@ -1,0 +1,123 @@
+version: '3'
+
+networks:
+    amarpet_backend:
+        driver: bridge
+
+services:
+    amarpet_elasticsearch:
+        image: elasticsearch:7.17.13
+        container_name: amarpet_elasticsearch
+        restart: unless-stopped
+        environment:
+            - node.name=elastic
+            - cluster.name=elastic-docker-cluster
+            - discovery.type=single-node
+            - bootstrap.memory_lock=true
+            - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+            - "http.cors.allow-headers=X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization"
+            - "http.cors.allow-credentials=true"
+            - "http.cors.enabled: false"
+            - "http.cors.allow-origin: *"
+            - "indices.breaker.total.limit: 80%"
+            - "ingest.geoip.downloader.enabled: false"
+        ports:
+            - "9200:9200"
+    #    amarpet_kibana:
+    #        image: docker.elastic.co/kibana/kibana:7.15.0
+    #        container_name: kibana
+    #        restart: unless-stopped
+    #        environment:
+    #            ELASTICSEARCH_URL: "http://amarpet_elasticsearch:9200"
+    #            ELASTICSEARCH_HOSTS: "http://amarpet_elasticsearch:9200"
+    #        ports:
+    #            - 5601:5601
+    #        depends_on:
+    #            - amarpet_elasticsearch
+    amarpet_app:
+        build:
+            context: ./docker/development
+            dockerfile: nginx.dockerfile
+        ports:
+            - "8081:80"
+        container_name: amarpet_app
+        volumes:
+            - ./:/var/www/html:delegated
+        depends_on:
+            - amarpet_php
+            - amarpet_redis
+            - amarpet_mysql
+        networks:
+            - amarpet_backend
+
+    amarpet_mysql:
+        image: mysql:8.0
+        restart: unless-stopped
+        container_name: amarpet_mysql
+        tty: true
+        volumes:
+            - ./docker/development/backup:/var/lib/mysql
+            - ./docker/development/data:/docker-entrypoint-initdb.d
+        ports:
+            - "3381:3306"
+        environment:
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_USER: ${DB_USERNAME}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+            SERVICE_TAGS: dev
+            SERVICE_NAME: mysql
+        networks:
+            - amarpet_backend
+
+    amarpet_php:
+        image: amarpet_php
+        build:
+            context: ./docker/development
+            dockerfile: php.dockerfile
+        container_name: amarpet_php
+        ports:
+            - "9081:9000"
+        volumes:
+            - ./:/var/www/html:delegated
+        networks:
+            - amarpet_backend
+
+    amarpet_redis:
+        image: redis:alpine
+        restart: unless-stopped
+        container_name: amarpet_redis
+        ports:
+            - "6381:6379"
+        networks:
+            - amarpet_backend
+
+    amarpet_npm:
+        image: node:18-alpine
+        container_name: amarpet_npm
+        volumes:
+            - ./:/var/www/html
+        ports:
+            - "3081:3000"
+        working_dir: /var/www/html
+        tty: true
+        networks:
+            - amarpet_backend
+
+    amarpet_queue:
+        image: amarpet_php
+        container_name: amarpet_queue
+        restart: always
+        working_dir: /var/www/html
+        command: php artisan queue:work
+        depends_on:
+            - amarpet_php
+        volumes:
+            - ./:/var/www/html:delegated
+        networks:
+            - amarpet_backend
+
+
+volumes:
+    elasticsearch:
+        driver: local
